@@ -18,38 +18,44 @@ const AuthForm = () => {
     const enteredEmail = enteredEmailRef.current.value
     const enteredPassword = enteredPasswordRef.current.value
     setIsLoading(true)
+    let url
     if (isLogin) {
+      url='https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDLwFZKg8KZEIlRPJ_FBc37TP7Vk45D3AE'
 
     } else (
-      fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDLwFZKg8KZEIlRPJ_FBc37TP7Vk45D3AE',
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            email: enteredEmail,
-            password: enteredPassword,
-            returnSecureToken: true
-          }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      ).then(res => {
-        setIsLoading(false)
-        if (res.ok) {
-
-        } else {
-          res.json().then(data => {
-            console.log(data)
-            let errorMessage = 'authentication failed...'
-            if (data && data.error && data.error.message) {
-              errorMessage = data.error.message
-            }
-            alert(errorMessage)
-          })
-        }
-      })
+      url='https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDLwFZKg8KZEIlRPJ_FBc37TP7Vk45D3AE'
 
     )
+    fetch(url,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        email: enteredEmail,
+        password: enteredPassword,
+        returnSecureToken: true
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  ).then(res => {
+    setIsLoading(false)
+    if (res.ok) {
+      res.json().then(data => {
+        console.log(data)
+      })
+
+    } else {
+      res.json().then(data => {
+        console.log(data)
+        let errorMessage = 'authentication failed...'
+        if (data && data.error && data.error.message) {
+          errorMessage = data.error.message
+        }
+        alert(errorMessage)
+      })
+    }
+  })
     enteredEmailRef.current.value = ''
     enteredPasswordRef.current.value = ''
 
